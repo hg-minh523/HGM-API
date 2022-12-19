@@ -1,9 +1,20 @@
+import { FC } from 'react'
 import styled from 'styled-components'
+import { Routes, Route } from 'react-router-dom'
+import config from './config'
+import Home from './page/Home/Home'
+import Login from './page/Login/Login'
+import Register from './page/Register/Register'
 
-function App() {
+
+const App:FC = () => {
   return (
    <Container>
-    APP
+    <Routes>
+      <Route path={config.routePath.home} element={<Home />}/>
+      <Route path={config.routePath.login} element={<Login />}/>
+      <Route path={config.routePath.register} element={<Register />}/>
+    </Routes>
    </Container>
   );
 }
