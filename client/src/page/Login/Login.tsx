@@ -16,7 +16,7 @@ const Login:FC<LoginProps> = () => {
     return ( 
     <Container>
        <div className="wrapper">
-            <div className="login-form">
+            <form className="login-form">
                 <div className="header">
                     <h1>LOGO</h1>
                 </div>
@@ -27,7 +27,7 @@ const Login:FC<LoginProps> = () => {
                     </div>
 
                     <div className="input-bar">
-                        <input type="password" placeholder="password"/>
+                        <input type="password" placeholder="Password"/>
                     </div>
 
                     <div className="keep">
@@ -53,7 +53,7 @@ const Login:FC<LoginProps> = () => {
                     </div>
                     
                 </div>
-            </div>
+            </form>
        </div>
     </Container>
     );
