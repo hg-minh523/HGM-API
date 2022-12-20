@@ -2,15 +2,10 @@ import { FC } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import config from "../../config";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faSquareGooglePlus } from "@fortawesome/free-brands-svg-icons";
-// import {
-//     IconLookup,
-//     IconDefinition,
-//     findIconDefinition
-//   } from '@fortawesome/fontawesome-svg-core'
+import { FaFacebookF } from 'react-icons/fa'
+import { AiOutlineGooglePlus } from 'react-icons/ai'
 
-//   const coffeeLookup: IconLookup = { prefix: 'fas', iconName: 'coffee' }
+
 
 
 interface LoginProps {
@@ -43,16 +38,20 @@ const Login:FC<LoginProps> = () => {
                     <Button>LOG IN</Button>
 
                     <div className="ask">
-                        <p>NEW USER? </p>
+                        <p>Do not have account already ? </p>
                         <Link to={config.routePath.register}>REGISTER</Link>
                     </div>
                 </div>
                 <div className="link">
 
-                    {/* <div className="icon">
-                    <FontAwesomeIcon icon={faSquareGooglePlus} />
-                    </div> */}
+                    <div className="icon fb">
+                        <FaFacebookF />
+                    </div>
 
+                    <div className="icon gg">
+                        <AiOutlineGooglePlus/>
+                    </div>
+                    
                 </div>
             </div>
        </div>
@@ -80,7 +79,7 @@ align-items: center;
             padding: 30px;
 
             .header{
-                height: 30px;
+                height: 50px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -126,6 +125,36 @@ align-items: center;
                     
                     a{
 
+                    }
+                }
+            }
+
+            .link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 40px;
+                gap: 50px;
+
+                .icon{
+                    background-color: #6666a8;
+                    border-radius: 999px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 50px;
+                    height: 50px;
+                    color: #F4F4F4;
+                    cursor: pointer;
+
+                    &.gg{
+                        font-size: 25px;
+                        background-color: #DE4B39;
+                        
+                    }
+
+                    &.fb{
+                        background-color: #3C5997;
                     }
                 }
             }
