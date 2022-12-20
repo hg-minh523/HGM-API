@@ -8,7 +8,7 @@ interface HomeProps {
 const Home:FC<HomeProps> = () => {
     return ( 
         <Container>
-            <h1>HOME</h1>
+            home
         </Container>
      );
 }

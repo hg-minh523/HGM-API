@@ -70,12 +70,14 @@ justify-content: center;
 align-items: center;
 
     .wrapper{
+        max-width: calc(100vw - 20px);
+        width: 450px;
+        height: auto;
 
         .login-form {
             
             box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px ;
-            width: 450px;
-            height: 500px;
+            width: 100%;
             padding: 30px;
 
             .header{
@@ -134,7 +136,7 @@ align-items: center;
                 align-items: center;
                 justify-content: center;
                 margin-top: 40px;
-                gap: 50px;
+                gap: 14px;
 
                 .icon{
                     background-color: #6666a8;
