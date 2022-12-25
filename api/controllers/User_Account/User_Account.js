@@ -1,57 +1,33 @@
-
-
-// import { json } from 'sequelize';
-const user = require('../../models/User_Account')
-const userInformationModel = ('../../models/User_Infor')
-const { signIn,login,verify } = require('../../common/authentication')
-
-export class userControlelr {
-  async createUser(req,res){
+const { comparePassword } = require('../../common/authentication')
+const UserSchema = require('../../models/User_Account/User_Account.Model')
+const jwt = require("jsonwebtoken")
+module.exports =  {
+  async  register(req,res) {
     const model = req.body;
-    if (model.password !== model.repassword) {
-      return res.status(400).json({message: "Need to password and repasswrod are the same"});
+    if (!model.User_Account_Name || !model.User_Account_Password){
+      return res.status(400).json({msg: "Fail to register account"});
     }
-    const userExist = user.findOne({
-      where : {
-        User_Account_Name: model.username
-      }
-    }) 
-    if(userExist){
-      return res.status(400).json({message: "Username has been exited"});
-    }
-    const hashPassword = await signIn();
-    const objectUser = {
-      User_Account_Name: model.username,
-      User_Account_Password: hashPassword
-    }
-    const userCreate = user.create(objectUser);
-    if(userCreate){
-      return res.status(200).json({message: "Username has been created"});
-    }
-  }
-  async login(req,res){
+    UserSchema.create(model).then(result => {
+      res.status(200).json({mg:"sucees"});
+    })
+  },
+  async login(req,res) {
     const model = req.body;
-    if (!model.username || !model.password){
-      return res.status(400).json({message: "Need username and password"});
+    if (!model.User_Account_Name || !model.User_Account_Password){
+      return res.status(400).json({msg: "Fail to  login"});
     }
-    const userExist = user.findOne({
-      where : {
-        User_Account_Name: model.username
+    UserSchema.findOne({where: {
+      User_Account_Name: model.User_Account_Name
+    }}).then(async result=>{
+      const user = result.dataValues
+      const compare = await comparePassword(user.User_Account_Password, model.User_Account_Password)
+      if(!!compare){
+        delete user.User_Account_Password;
+        return res.status(200).json({token: jwt.sign(user, process.env.PRIVATEKEY, {expiresIn: '24h'})});
+      }else {
+        return res.status(400).json({msg:"wrong password"})
       }
-    }) 
-    if(!userExist){
-      return res.status(400).json({message: "User has been registed"});
     }
-
-    const checkUser = login(model.User_Account_Password,userExist.password);
-    if (checkUser){
-      const inforUser = userInformationModel.findOne({
-        where : {
-          User_Information_Code: userExist.id
-        }
-      })
-      const userVerify = verify(inforUser);
-      return res.json({})
-    }
-  }
+    )
+  },
 }

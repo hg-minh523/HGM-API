@@ -1,28 +1,36 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:');
-
-const userModel = (sequelize,DataTypes) => {
-  const User = sequelize.define('User', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    User_Account_Name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    User_Account_Password: {
-      type: DataTypes.STRING,
-      allowNull: false
+const db = require('../../database/Database')
+const bcrypt = require('bcrypt');
+const User = db.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  User_Account_Name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    primaryKey: true,
+  },
+  User_Account_Password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    async set(value) {
+      const saltRounds = 10;
+      const hash = await bcrypt.hashSync(value, saltRounds);
+      this.setDataValue('User_Account_Password', hash);
     }
-  },{
-    timestamps: true,
-    freezeTableName: true,
-  }); 
-  User.sync()
-  return User
-}
+  },
+  User_Account_Permission: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    primaryKey: true,
+  },
+}, {
+  timestamps: true,
+  freezeTableName: true,
+});
+User.sync()
 
 
-module.exports = userModel;
+module.exports = User;

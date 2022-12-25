@@ -1,8 +1,6 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('sql12::memory:');
-
-const userInformationModel = () => {
-  const User_Information = sequelize.define('User', {
+const { DataTypes } = require('sequelize');
+const db = require('../../database/Database')
+  const User_InforShema = db.define('User', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -30,9 +28,7 @@ const userInformationModel = () => {
       allowNull: false
     }
   });
-  User_Information.sync()
-  return User_Information
-}
+  User_InforShema.sync();
 
 
-module.exports = userInformationModel
+module.exports = User_InforShema

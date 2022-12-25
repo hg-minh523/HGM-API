@@ -1,32 +1,13 @@
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const signIn = (inforUser) => {
-  const token = jwt.sign(inforUser, process.env.PRIVATEKEY,  { expiresIn: '24h' }, function(err, token) {
-    if(err) {
-      throw new Error;
-    }
-  });
-  if (!!token ) {
-    const password = inforUser.password
-    const saltRounds = 10;
-    bcrypt.hash(password, saltRounds,async function(err, hash) {
-      if (err) {
-        throw new Error;
-      }
-      return hash
-  });
-  }
+const comparePassword = async (hash,password) => {
+  return bcrypt.compareSync(password, hash);
 }
-
-
-const login = async (password,hash) => {
- return await bcrypt.compare(password, hash);
-}
-const verify = async () => {
-
+const verifyUser = async (token) => {
+  const decoded = jwt.verify(token.split(' ')[1], 'secret')
+  return decoded
 }
 module.exports = {
-  signIn,
-  login,
-  verify
+  comparePassword,
+  verifyUser
 }
