@@ -11,22 +11,19 @@ const db = require('../../database/Database')
       allowNull: false,
       foreignkey: true
     },
-    User_Information_Name: {
+     User_Employee_Code: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      foreignkey: true
+    },
+    User_Information_DisplayName: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    User_Information_Address: {
+    User_Information_Avatar: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    User_Information_Phone: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    User_Information_Email: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
   });
   User_InforShema.sync();
 
