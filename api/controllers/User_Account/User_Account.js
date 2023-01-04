@@ -29,8 +29,11 @@ module.exports = {
       } else {
         return res.status(400).json({ msg: "wrong password" })
       }
-    }
-    )
+    })
+    .catch( er => {
+      console.log(er);
+      return res.status(404).json({msg: "username not found"})
+    })
   },
 
   async search(req, res) {

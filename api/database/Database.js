@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
-module.exports =  new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
+
+module.exports =  new Sequelize(process.env.REACT_APP_DATABASE, process.env.REACT_APP_USER, process.env.REACT_APP_PASSWORD, {
         host: '127.0.0.1',
         dialect: 'mysql',
         pool: {
