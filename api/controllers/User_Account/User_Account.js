@@ -8,7 +8,7 @@ module.exports = {
       return res.status(400).json({ msg: "Fail to register account" });
     }
     UserSchema.create(model).then(result => {
-      res.status(200).json({ mg: "sucees" });
+      res.status(200).json({ mg: "success" });
     })
   },
   async login(req, res) {
@@ -38,6 +38,7 @@ module.exports = {
 
   async search(req, res) {
     const model = req.body;
+    console.log(req);
     const query = {};
     if (!!model.User_Account_Name) {
       query.User_Account_Name = model.User_Account_Name
@@ -48,8 +49,8 @@ module.exports = {
     UserSchema.findAll({
       where: query
     }).then(result => {
-      console.log(result[0].dataValues)
-      return res.status(200).json({ data: result[0].dataValues })
+      console.log(result)
+      return res.status(200).json({ data: result })
     });
   },
   async update(req, res) {

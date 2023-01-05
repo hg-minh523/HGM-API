@@ -7,7 +7,7 @@ module.exports = {
         model.User_Information_Code = user.User_Account_Name
         User_InforShema.create(model)
             .then(() => {
-                return res.status(200).json({ msg: "sucees" });
+                return res.status(200).json({ msg: "success" });
             })
             .catch(err => {
                 return res.status(400).json({ false: "false", error: err });
