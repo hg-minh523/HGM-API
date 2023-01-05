@@ -26,6 +26,10 @@ const User = db.define('User', {
     allowNull: false,
     primaryKey: true,
   },
+  Status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 }, {
   timestamps: true,
   freezeTableName: true,

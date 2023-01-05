@@ -5,32 +5,41 @@ const Employee = db.define('User', {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
+
     },
     Employee_Code: {
         type: DataTypes.STRING,
-        allowNull: false,
         unique: true,
+        primaryKey: true
     },
     Employee_Name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+    },
+    Employee_Account: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        foreignKey: true,
+    },
+    Employee_Avatar: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     Employee_Phone: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
     },
     Employee_Email: {
         type: DataTypes.STRING,
-        allowNull: false,
         unique: true,
     },
     Employee_SSR: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true,
     },
+    Status:{
+        type: DataTypes.STRING,
+    }
 });
 Employee.sync();
 

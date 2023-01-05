@@ -51,8 +51,8 @@ module.exports = {
   },
   async update(req, res) {
     const user = await verifyUser(req.headers.authorization);
-    const query = { id: user.id }
     const model = req.body;
+    const query = { id: model.id }
     const valueUpdate = {
       User_Account_Permission: model.User_Account_Permission,
       User_Account_Name: model.User_Account_Name
