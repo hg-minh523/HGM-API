@@ -15,6 +15,9 @@ const Employee = db.define('User', {
     Employee_Name: {
         type: DataTypes.STRING,
         allowNull: false,
+    }, Employee_BirthDay: {
+        type: DataTypes.DATE,
+        allowNull: false,
     },
     Employee_Account: {
         type: DataTypes.STRING,
@@ -32,7 +35,7 @@ const Employee = db.define('User', {
         type: DataTypes.STRING,
         unique: true,
     },
-    Employee_SSR: {
+    Employee_CI: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: true,

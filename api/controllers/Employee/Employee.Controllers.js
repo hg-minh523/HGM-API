@@ -13,6 +13,7 @@ genarateCode = async () => {
 },
     module.exports = {
         async create(req, res) {
+            console.log(req.headers.authorization)
             const user = await verifyUser(req.headers.authorization);
             const model = req.body
             model.Employee_Account = user.User_Account_Name
@@ -56,21 +57,28 @@ genarateCode = async () => {
                     id: ids
                 }
             }).then(result => {
-                console.log(result[0])
                 return res.status(200).json({ data: result[0].dataValues })
             });
         },
+
         async delete(req, res) {
             const user = await verifyUser(req.headers.authorization);
-            const ids = req.body.ids;
-            Employee.destroy({
-                where: {
-                    id: ids
+            const ids = req.params.id;
+            try {
+                const result = Employee.destroy({
+                    where: {id:ids}
+                });
+                if(!!result){
+                    return res.status(200).json({msg: "sucees"});
+                }else {
+                    return res.status(401).json({msg: "failt"});
+
                 }
-            }).then(result => {
-                return res.status(200).json({ data: result[0].dataValues })
-            });
+            } catch (error) {
+
+            }
         },
+
         async search(req, res) {
             const model = req.body;
             const query = {};
@@ -83,8 +91,8 @@ genarateCode = async () => {
             Employee.findAll({
               where: query
             }).then(result => {
-              console.log(result[0].dataValues)
-              return res.status(200).json({ data: result[0].dataValues })
+            const data= result.map(item => item.dataValues)
+              return res.status(200).json({ results:data })
             });
           },
     }
