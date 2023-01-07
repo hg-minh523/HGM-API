@@ -8,7 +8,7 @@ module.exports = {
   async register(req, res) {
     const model = req.body;
     if (!model.User_Account_Name || !model.User_Account_Password) {
-      return res.status(400).json();
+      return res.status(400).json({ msg: "Fail to register" });
     }
     const validateResult = await User_AccountValidation.checkBeforeCreate(model);
     if(validateResult === 1){
@@ -18,11 +18,9 @@ module.exports = {
       return result
     }).then(data => {
       data.setEmployee(model.Employee_Code);
-    }).then(data => {
-      res.status(200).json({msg:"Success"});
-    })
-    .catch(e => {
-      return res.status(404).json({msg: 'Fail to register account'})
+      res.status(200).json(data);
+    }).catch(e => {
+      return res.status(404).json(e)
     })
   },
 
