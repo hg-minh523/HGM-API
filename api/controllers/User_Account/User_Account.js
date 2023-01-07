@@ -1,16 +1,28 @@
-const { comparePassword, verifyUser } = require('../../common/authentication')
-const UserSchema = require('../../models/User_Account/User_Account.Model')
+const { comparePassword, verifyUser } = require('../../common/authentication');
+const UserSchema = require('../../models/User_Account/User_Account.Model');
+const User_AccountValidation = require('./User_Account.Validation'); 
 const jwt = require("jsonwebtoken")
+
 module.exports = {
+
   async register(req, res) {
     const model = req.body;
     if (!model.User_Account_Name || !model.User_Account_Password) {
       return res.status(400).json({ msg: "Fail to register account" });
     }
+    const validateResult = await User_AccountValidation.checkBeforeCreate(model);
+    if(validateResult === 1){
+        return res.status(400).json({msg: "duplicate product code"});
+    }
     UserSchema.create(model).then(result => {
-      res.status(200).json({ mg: "sucees" });
+      return result
+    }).then(data => {
+      data.setEmployee(model.Employee_Code);
+    }).then(data => {
+      res.status(200).json({msg:"Sucees"});
     })
   },
+
   async login(req, res) {
     const model = req.body;
     if (!model.User_Account_Name || !model.User_Account_Password) {
@@ -83,7 +95,6 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      console.log(result[0])
       return res.status(200).json({ data: result[0].dataValues })
     });
   }

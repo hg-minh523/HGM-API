@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/Database')
-const Employee = db.define('User', {
+const Employee = db.define('Employee', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -18,11 +18,7 @@ const Employee = db.define('User', {
     }, Employee_BirthDay: {
         type: DataTypes.DATE,
         allowNull: false,
-    },
-    Employee_Account: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        foreignKey: true,
+        defaultValue: new Date()
     },
     Employee_Avatar: {
         type: DataTypes.STRING,
@@ -44,7 +40,7 @@ const Employee = db.define('User', {
         type: DataTypes.STRING,
     }
 });
-Employee.sync();
+Employee.sync({force: true});
 
 
 module.exports = Employee

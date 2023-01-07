@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/Database')
-  const Products = db.define('User', {
+  const Products = db.define('Product', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -10,6 +10,8 @@ const db = require('../../database/Database')
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      primaryKey: true
+
     },
     Product_Name: {
         type: DataTypes.STRING,
@@ -21,23 +23,24 @@ const db = require('../../database/Database')
         foreignKey: true
     },
     Product_Price: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: DataTypes.INTEGER,
     },
     Product_Images: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     Product_Detail: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
     Product_Description: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
+    Status: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   });
-  Products.sync();
+  Products.sync({force: true});
 
 
 module.exports = Products

@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../../database/Database')
 const bcrypt = require('bcrypt');
+const Employee = require('../Employee/Employee.Model')
 const User = db.define('User', {
   id: {
     type: DataTypes.INTEGER,
@@ -34,7 +35,16 @@ const User = db.define('User', {
   timestamps: true,
   freezeTableName: true,
 });
-User.sync()
+
+User.belongsTo(Employee,{
+  foreignKey:{
+    name: "employeeId",
+    type: DataTypes.STRING,
+    allowNull: true,
+  }
+})
+
+User.sync({force:true});
 
 
 module.exports = User;
