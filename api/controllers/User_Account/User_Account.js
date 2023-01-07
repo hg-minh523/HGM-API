@@ -18,7 +18,7 @@ module.exports = {
       return result
     }).then(data => {
       data.setEmployee(model.Employee_Code);
-      res.status(200).json(data);
+      res.status(200).json(data); 
     }).catch(e => {
       return res.status(404).json(e)
     })
@@ -68,9 +68,10 @@ module.exports = {
     const user = await verifyUser(req.headers.authorization);
     const model = req.body;
     const query = { id: model.id }
+    console.log('datadasdawdawdawdawdawdawdawdaw', model);
     const valueUpdate = {
       User_Account_Permission: model.User_Account_Permission,
-      User_Account_Name: model.User_Account_Name
+      User_Account_Password: model.User_Account_Password
     };
 
     UserSchema.update(valueUpdate, {
