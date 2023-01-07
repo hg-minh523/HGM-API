@@ -8,7 +8,7 @@ module.exports = {
   async register(req, res) {
     const model = req.body;
     if (!model.User_Account_Name || !model.User_Account_Password) {
-      return res.status(400).json({ msg: "Fail to register account" });
+      return res.status(400).json();
     }
     const validateResult = await User_AccountValidation.checkBeforeCreate(model);
     if(validateResult === 1){
@@ -19,7 +19,10 @@ module.exports = {
     }).then(data => {
       data.setEmployee(model.Employee_Code);
     }).then(data => {
-      res.status(200).json({msg:"Sucees"});
+      res.status(200).json({msg:"Success"});
+    })
+    .catch(e => {
+      return res.status(404).json({msg: 'Fail to register account'})
     })
   },
 
@@ -59,8 +62,8 @@ module.exports = {
     UserSchema.findAll({
       where: query
     }).then(result => {
-      console.log(result[0].dataValues)
-      return res.status(200).json({ data: result[0].dataValues })
+      console.log(result)
+      return res.status(200).json(result)
     });
   },
   async update(req, res) {
@@ -75,7 +78,7 @@ module.exports = {
     UserSchema.update(valueUpdate, {
       where: query
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json({ data: result })
     });
   },
   async delete(req, res) {
@@ -86,7 +89,7 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json(result)
     });
   },
   async getById(req, res) {
@@ -97,7 +100,7 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json(result[0])
     });
   }
 }
