@@ -5,6 +5,7 @@ router.post('/register',userControlelr.register);
 router.post('/login',userControlelr.login);
 router.post('/search',userControlelr.search);
 router.post('/update',userControlelr.update);
+router.post('/delete',userControlelr.delete);
 router.get('/getById/:id',userControlelr.getById);
 
 

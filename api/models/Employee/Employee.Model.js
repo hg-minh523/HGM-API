@@ -5,7 +5,6 @@ const Employee = db.define('User', {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
-
     },
     Employee_Code: {
         type: DataTypes.STRING,
