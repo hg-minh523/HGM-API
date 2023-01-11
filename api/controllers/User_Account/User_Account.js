@@ -8,7 +8,7 @@ module.exports = {
   async register(req, res) {
     const model = req.body;
     if (!model.User_Account_Name || !model.User_Account_Password) {
-      return res.status(400).json({ msg: "Fail to register account" });
+      return res.status(400).json({ msg: "Fail to register" });
     }
     const validateResult = await User_AccountValidation.checkBeforeCreate(model);
     if(validateResult === 1){
@@ -18,8 +18,9 @@ module.exports = {
       return result
     }).then(data => {
       data.setEmployee(model.Employee_Code);
-    }).then(data => {
-      res.status(200).json({msg:"Sucees"});
+      res.status(200).json(data); 
+    }).catch(e => {
+      return res.status(404).json(e)
     })
   },
 
@@ -59,23 +60,24 @@ module.exports = {
     UserSchema.findAll({
       where: query
     }).then(result => {
-      console.log(result[0].dataValues)
-      return res.status(200).json({ data: result[0].dataValues })
+      console.log(result)
+      return res.status(200).json(result)
     });
   },
   async update(req, res) {
     const user = await verifyUser(req.headers.authorization);
     const model = req.body;
     const query = { id: model.id }
+    console.log('datadasdawdawdawdawdawdawdawdaw', model);
     const valueUpdate = {
       User_Account_Permission: model.User_Account_Permission,
-      User_Account_Name: model.User_Account_Name
+      User_Account_Password: model.User_Account_Password
     };
 
     UserSchema.update(valueUpdate, {
       where: query
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json({ data: result })
     });
   },
   async delete(req, res) {
@@ -86,7 +88,7 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json(result)
     });
   },
   async getById(req, res) {
@@ -97,7 +99,7 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json(result[0])
     });
   }
 }
