@@ -1,46 +1,38 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/Database')
-const Employee = db.define('Employee', {
+const Customer = db.define('Customer', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
 
     },
-    Employee_Code: {
+    
+    Customer_Code: {
         type: DataTypes.STRING,
         unique: true,
         primaryKey: true
     },
-    Employee_Name: {
+
+    Customer_Name: {
         type: DataTypes.STRING,
         allowNull: false,
-    }, 
-    Employee_BirthDay: {
-        type: DataTypes.DATE,
-        defaultValue: new Date()
     },
-    Employee_Avatar: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    Employee_Phone: {
+
+    Customer_Phone: {
         type: DataTypes.STRING,
     },
-    Employee_Email: {
+
+    Customer_Email: {
         type: DataTypes.STRING,
         unique: true,
     },
-    Employee_CI: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        unique: true,
-    },
+
     Status:{
         type: DataTypes.STRING,
     }
 });
-Employee.sync({force: true});
+Customer.sync({force: true});
 
 
-module.exports = Employee
+module.exports = Customer

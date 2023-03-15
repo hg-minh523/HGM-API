@@ -1,15 +1,28 @@
 const { verifyUser } = require('../../common/authentication');
 const Product_Validator = require('./Product.Validation')
 const Products = require('../../models/Products/Products.Model');
+const moment = require('moment');
     module.exports = {
         async create(req, res) {
-            const user = await verifyUser(req.headers.authorization);
+            const user = await verifyUser(req.cookies.accessToken);
+            console.log(user)
+
+            if (!user){
+                return res.json({msg: "Token expired"});
+            }
             const model = req.body;
             const validateResult = await Product_Validator.checkBeforeCreate(model);
             if(validateResult === 1){
                 return res.status(400).json({msg: "duplicate product code"});
             }
             try {
+                const pathImg = model?.Product_Images?.name;
+                const day = moment().format('YYYY-MM-DD-HH-mm-ss');
+
+                if(pathImg){
+                    model.Product_Images = 'product' +'-'+ day  + '.png'
+                }
+
                 const result = Products.create(model);
                 if(!!result){
                     return res.status(200).json({msg: "sucees"});
@@ -21,6 +34,7 @@ const Products = require('../../models/Products/Products.Model');
 
             }
         },
+        
         async update(req, res) {
             const user = await verifyUser(req.headers.authorization);
             const model = req.body;
@@ -72,14 +86,26 @@ const Products = require('../../models/Products/Products.Model');
         },
 
         async search(req, res) {
-            const model = req.body;
+            const model = req.body.searchModel;
             const query = {};
-            if (!!model.User_Account_Name) {
-              query.User_Account_Name = model.User_Account_Name
+            if (!!model.Product_Code && model.Product_Code !== ''){
+                query.Product_Code =  {$like: model.Product_Code}
             }
-            if (!!model.User_Account_Permission) {
-              query.User_Account_Name = model.User_Account_Permission
+            if (!!model.Product_Name && model.Product_Name !== ''){
+                query.Product_Name = model.Product_Name
             }
+            if (!!model.Product_Detail && model.Product_Detail !== ''){
+                query.Product_Detail = model.Product_Detail
+            }
+
+            if (!!model.Product_Status && model.Product_Status !== ''){
+                query.Product_Status = model.Product_Status
+            }
+
+            if (!!model.Product_Group_Code && model.Product_Group_Code.length > 0){
+                query.Product_Group_Code = model.Product_Group_Code
+            }
+            console.log(query)
             Products.findAll({
               where: query
             }).then(result => {

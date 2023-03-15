@@ -1,6 +1,7 @@
 const { verifyUser } = require('../../common/authentication');
 const Employee = require('../../models/Employee/Employee.Model');
 const { autoIncrementCode } = require('../../common/CommonMethod');
+const jwt = require("jsonwebtoken")
 genarateCode = async () => {
     try {
         const findUser = await Employee.findAll();
@@ -13,8 +14,10 @@ genarateCode = async () => {
 },
     module.exports = {
         async create(req, res) {
-            console.log(req.headers.authorization)
-            const user = await verifyUser(req.headers.authorization);
+            const token = req.cookies.accessToken;
+
+       const user = await jwt.verify(token, 'secret');
+
             const model = req.body
             model.Employee_Account = user.User_Account_Name
             model.Employee_Code = await genarateCode();
@@ -30,6 +33,7 @@ genarateCode = async () => {
 
             }
         },
+
         async update(req, res) {
             const user = await verifyUser(req.headers.authorization);
             const model = req.body;
@@ -50,8 +54,7 @@ genarateCode = async () => {
         },
         async getById(req, res) {
             const user = await verifyUser(req.headers.authorization);
-            const ids = req.params.id;
-
+            const ids = Number.parseInt(req.params.id);
             Employee.findAll({
                 where: {
                     id: ids

@@ -21,14 +21,14 @@ const Product_Group = require('../../models/Products_Group/Product_Group.Model')
             const model = req.body;
             const query = { id: model.id }
             const valueUpdate = {
-                Employee_Name: model.Employee_Name,
-                Employee_Avatar: model.Employee_Avatar,
+                Product_Group_Name: model.Product_Group_Name,
+                Product_Group_Avatar: model.Employee_Avatar,
                 Employee_Phone: model.Employee_Phone,
                 Employee_Email: model.Employee_Email,
                 Employee_SSR: model.Employee_SSR
             };
           
-            Employee.update(valueUpdate, {
+            Product_Group.update(valueUpdate, {
                 where: query
             }).then(result => {
                 return res.status(200).json({ data: result[0].dataValues })
@@ -38,7 +38,7 @@ const Product_Group = require('../../models/Products_Group/Product_Group.Model')
             const user = await verifyUser(req.headers.authorization);
             const ids = req.params.id;
 
-            Employee.findAll({
+            Product_Group.findAll({
                 where: {
                     id: ids
                 }
@@ -50,8 +50,9 @@ const Product_Group = require('../../models/Products_Group/Product_Group.Model')
         async delete(req, res) {
             const user = await verifyUser(req.headers.authorization);
             const ids = req.params.id;
+            console.log(ids)
             try {
-                const result = Employee.destroy({
+                const result = Product_Group.destroy({
                     where: {id:ids}
                 });
                 if(!!result){
@@ -74,7 +75,7 @@ const Product_Group = require('../../models/Products_Group/Product_Group.Model')
             if (!!model.User_Account_Permission) {
               query.User_Account_Name = model.User_Account_Permission
             }
-            Employee.findAll({
+            Product_Group.findAll({
               where: query
             }).then(result => {
             const data= result.map(item => item.dataValues)

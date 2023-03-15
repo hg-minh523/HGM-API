@@ -4,8 +4,15 @@ const comparePassword = async (hash,password) => {
   return bcrypt.compareSync(password, hash);
 }
 const verifyUser = async (token) => {
-  const decoded = jwt.verify(token.split(' ')[1], 'secret')
-  return decoded
+  const jwtTOken = await jwt.verify(token, 'secret',function(err,decoded){
+    if(!!err){
+      console.log(err)
+      return false;
+    }
+    return decoded;
+  })
+
+  return jwtTOken
 }
 module.exports = {
   comparePassword,

@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../../database/Database')
 const bcrypt = require('bcrypt');
 const Employee = require('../Employee/Employee.Model')
-const User = db.define('User', {
+const UserEntity = db.define('User', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -36,7 +36,7 @@ const User = db.define('User', {
   freezeTableName: true,
 });
 
-User.belongsTo(Employee,{
+UserEntity.belongsTo(Employee,{
   foreignKey:{
     name: "employeeId",
     type: DataTypes.STRING,
@@ -44,7 +44,7 @@ User.belongsTo(Employee,{
   }
 })
 
-User.sync({force:true});
+UserEntity.sync({});
 
 
-module.exports = User;
+module.exports = UserEntity;

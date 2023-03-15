@@ -1,9 +1,14 @@
 const { comparePassword, verifyUser } = require('../../common/authentication');
 const UserSchema = require('../../models/User_Account/User_Account.Model');
-const User_AccountValidation = require('./User_Account.Validation'); 
+const User_AccountValidation = require('./User_Account.Validation');
 const jwt = require("jsonwebtoken")
 
 module.exports = {
+  async logOut(req, res) {
+    res.clearCookie("accessToken");
+    res.clearCookie("refresherToken");
+    return res.json({msg: "suceess"});
+  },
 
   async register(req, res) {
     const model = req.body;
@@ -11,15 +16,15 @@ module.exports = {
       return res.status(400).json({ msg: "Fail to register account" });
     }
     const validateResult = await User_AccountValidation.checkBeforeCreate(model);
-    if(validateResult === 1){
-        return res.status(400).json({msg: "duplicate product code"});
+    if (validateResult === 1) {
+      return res.status(400).json({ msg: "duplicate product code" });
     }
     UserSchema.create(model).then(result => {
       return result
     }).then(data => {
       data.setEmployee(model.Employee_Code);
     }).then(data => {
-      res.status(200).json({msg:"Sucees"});
+      res.status(200).json({ msg: "Sucees" });
     })
   },
 
@@ -28,23 +33,60 @@ module.exports = {
     if (!model.User_Account_Name || !model.User_Account_Password) {
       return res.status(400).json({ msg: "Fail to  login" });
     }
+
     UserSchema.findOne({
       where: {
-        User_Account_Name: model.User_Account_Name
+        User_Account_Name: model?.User_Account_Name,
       }
     }).then(async result => {
-      const user = result.dataValues
-      const compare = await comparePassword(user.User_Account_Password, model.User_Account_Password)
+      const user = result?.dataValues
+      const compare = await comparePassword(user.User_Account_Password, model?.User_Account_Password)
       if (!!compare) {
         delete user.User_Account_Password;
-        return res.status(200).json({ token: jwt.sign(user, process.env.PRIVATEKEY, { expiresIn: '24h' }) });
+        const refreshToken = { token: jwt.sign(user, process.env.PRIVATEKEY, { expiresIn: '30day' }) };
+        const accessToken = { token: jwt.sign(user, process.env.PRIVATEKEY, { expiresIn: '24h' }) };
+        res.cookie("refreshToken", `${refreshToken.token}`, {
+          httpOnly: true,
+          secure: true,
+          port: "4000",
+          domain: 'localhost',
+          Path: "/"
+        }
+        );
+        res.cookie("accessToken", `${accessToken.token}`, {
+          httpOnly: true,
+          secure: true,
+          port: "4000",
+          domain: 'localhost',
+          Path: "/"
+        }
+        );
+
+        return res.status(200).json({ refreshToken, accessToken });
       } else {
         return res.status(400).json({ msg: "wrong password" })
       }
     })
-    .catch(err => {
-      return res.status(404).json({ msg: "User is not found" })
-    })
+      .catch(err => {
+        console.log(err)
+        return res.status(404).json({ msg: "User is not found" })
+      })
+  },
+
+  async refreshToken(token) {
+    try {
+      jwt.verify(token, 'secret', function (err, decoded) {
+        if (err) {
+          return res.json("invalid refresh token");
+        }
+        if (decode) {
+          const newToken = jwt.sign(jwt.sign(decode, process.env.PRIVATEKEY, { expiresIn: '24h' }));
+          return res.json({ token: newToken });
+        }
+      })
+    } catch (error) {
+      throw error;
+    }
   },
 
   async search(req, res) {
@@ -59,10 +101,18 @@ module.exports = {
     UserSchema.findAll({
       where: query
     }).then(result => {
-      console.log(result[0].dataValues)
       return res.status(200).json({ data: result[0].dataValues })
     });
   },
+
+  async getUserInformation(req, res) {
+    const token = req.cookies.accessToken;
+    if (!!token) {
+      const user = await jwt.verify(token, 'secret');
+      return res.status(200).json(user);
+    }
+  },
+
   async update(req, res) {
     const user = await verifyUser(req.headers.authorization);
     const model = req.body;
@@ -78,6 +128,7 @@ module.exports = {
       return res.status(200).json({ data: result[0].dataValues })
     });
   },
+
   async delete(req, res) {
     const user = await verifyUser(req.headers.authorization);
     const ids = req.body.ids;
@@ -89,6 +140,7 @@ module.exports = {
       return res.status(200).json({ data: result[0].dataValues })
     });
   },
+
   async getById(req, res) {
     const user = await verifyUser(req.headers.authorization);
     const ids = req.params.id;
@@ -100,4 +152,5 @@ module.exports = {
       return res.status(200).json({ data: result[0].dataValues })
     });
   }
+
 }
