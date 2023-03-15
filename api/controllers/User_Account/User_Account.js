@@ -13,7 +13,7 @@ module.exports = {
   async register(req, res) {
     const model = req.body;
     if (!model.User_Account_Name || !model.User_Account_Password) {
-      return res.status(400).json({ msg: "Fail to register account" });
+      return res.status(400).json({ msg: "Fail to register" });
     }
     const validateResult = await User_AccountValidation.checkBeforeCreate(model);
     if (validateResult === 1) {
@@ -117,15 +117,16 @@ module.exports = {
     const user = await verifyUser(req.headers.authorization);
     const model = req.body;
     const query = { id: model.id }
+    console.log('datadasdawdawdawdawdawdawdawdaw', model);
     const valueUpdate = {
       User_Account_Permission: model.User_Account_Permission,
-      User_Account_Name: model.User_Account_Name
+      User_Account_Password: model.User_Account_Password
     };
 
     UserSchema.update(valueUpdate, {
       where: query
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json({ data: result })
     });
   },
 
@@ -137,7 +138,7 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json(result)
     });
   },
 
@@ -149,7 +150,7 @@ module.exports = {
         id: ids
       }
     }).then(result => {
-      return res.status(200).json({ data: result[0].dataValues })
+      return res.status(200).json(result[0])
     });
   }
 
