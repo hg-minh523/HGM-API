@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 module.exports = {
   async logOut(req, res) {
     res.clearCookie("accessToken");
-    res.clearCookie("refresherToken");
+    res.clearCookie("refreshToken");
     return res.json({msg: "suceess"});
   },
 
@@ -73,17 +73,41 @@ module.exports = {
       })
   },
 
-  async refreshToken(token) {
+  async refreshToken(req,res) {
     try {
-      jwt.verify(token, 'secret', function (err, decoded) {
-        if (err) {
-          return res.json("invalid refresh token");
+      const token = req.cookies.refreshToken;
+      const user = await jwt.verify(token,  process.env.PRIVATEKEY,function(err,decoded){
+        if (decoded) {
+          const body = {
+            id: decoded.id,
+            User_Account_Name: decoded.User_Account_Name,
+            User_Account_Permission: decoded.User_Account_Permission,
+            Status: decoded.Status,
+            createdAt: decoded.createdAt,
+            updatedAt: decoded.updatedAt,
+            employeeId: decoded.employeeId,
+
+          }
+          return body
         }
-        if (decode) {
-          const newToken = jwt.sign(jwt.sign(decode, process.env.PRIVATEKEY, { expiresIn: '24h' }));
-          return res.json({ token: newToken });
+        if (err){
+          return false;
         }
-      })
+      });
+      if (!user){
+        res.json({msg:'refreshToken is expired' })
+      }
+      
+      console.log(user)
+      const newToken = jwt.sign(user, process.env.PRIVATEKEY, { expiresIn: '24h' });
+      res.cookie("accessToken", newToken, {
+        httpOnly: true,
+        secure: true,
+        port: "4000",
+        domain: 'localhost',
+        Path: "/"
+      });
+      return res.json({msg: "refresh success"});
     } catch (error) {
       throw error;
     }
@@ -108,7 +132,15 @@ module.exports = {
   async getUserInformation(req, res) {
     const token = req.cookies.accessToken;
     if (!!token) {
-      const user = await jwt.verify(token, 'secret');
+      const user = await jwt.verify(token, 'secret',function(err,decoded){
+        if(err){
+          return false;
+        }
+        return decoded
+      });
+      if(!user){
+        return res.json({msg : 'Token Expired'})
+      }
       return res.status(200).json(user);
     }
   },
@@ -117,7 +149,6 @@ module.exports = {
     const user = await verifyUser(req.headers.authorization);
     const model = req.body;
     const query = { id: model.id }
-    console.log('datadasdawdawdawdawdawdawdawdaw', model);
     const valueUpdate = {
       User_Account_Permission: model.User_Account_Permission,
       User_Account_Password: model.User_Account_Password

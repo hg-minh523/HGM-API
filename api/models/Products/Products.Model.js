@@ -40,7 +40,9 @@ const db = require('../../database/Database')
     Product_Images: {
       type: DataTypes.STRING,
     },
-
+    Product_Creator: {
+      type: DataTypes.STRING,
+    },
     Status: {
       type: DataTypes.STRING,
       allowNull: false
@@ -48,5 +50,5 @@ const db = require('../../database/Database')
   });
   ProductEntity.sync();
 
-
+  
 module.exports = ProductEntity

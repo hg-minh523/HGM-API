@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userControlelr = require('../controllers/User_Account/User_Account');
 router.post('/register',userControlelr.register);
-router.post('/refreshToken',userControlelr.refreshToken);
+router.get('/refreshToken',userControlelr.refreshToken);
 router.post('/login',userControlelr.login);
 router.post('/search',userControlelr.search);
 router.get('/getUserInformation',userControlelr.getUserInformation);

@@ -1,38 +1,36 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/Database')
-const CustomerEntity = db.define('Customer', {
+const CartDetailEntity = db.define('Product', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
-
     },
-    
-    Customer_Code: {
+
+    Card_Detail_Product: {
         type: DataTypes.STRING,
-        unique: true,
-        primaryKey: true
+        foreignKey: true,
     },
 
-    Customer_Name: {
+    Card_Detail_Price: {
+        type: DataTypes.STRING,
+    },
+
+    Card_Detail_Promotion: {
+        type: DataTypes.STRING,
+    },
+
+    Card_Detail_Amount: {
+        type: DataTypes.STRING,
+    },
+    Card_Code: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-
-    Customer_Phone: {
-        type: DataTypes.STRING,
-    },
-
-    Customer_Email: {
-        type: DataTypes.STRING,
         unique: true,
+        foreignKey: true
     },
-
-    Status:{
-        type: DataTypes.STRING,
-    }
 });
-CustomerEntity.sync();
+CartDetailEntity.sync();
 
 
-module.exports = CustomerEntity
+module.exports = CartDetailEntity

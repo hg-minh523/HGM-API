@@ -12,8 +12,9 @@ const session = require("express-session")
 // Setup middlerware
 app.use(cors({
   credentials: true,
-
-  origin: "http://localhost:3000",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  // maxAge: 600,
+  origin: ["http://localhost:3000","http://localhost:3006"],
 }));
 // Creating session 
 app.use(session({

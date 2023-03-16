@@ -36,6 +36,11 @@ const Employee = db.define('Employee', {
         allowNull: true,
         unique: true,
     },
+    Employee_Creator: {
+        type: DataTypes.STRING,
+        // allowNull: true,
+        foreignKey: true,
+    },
     Status:{
         type: DataTypes.STRING,
     }

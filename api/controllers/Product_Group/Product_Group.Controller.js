@@ -69,11 +69,14 @@ const Product_Group = require('../../models/Products_Group/Product_Group.Model')
         async search(req, res) {
             const model = req.body;
             const query = {};
-            if (!!model.User_Account_Name) {
-              query.User_Account_Name = model.User_Account_Name
+            if (!!model.Product_Group_Code ){
+                query.Product_Group_Code = model.Product_Group_Code
             }
-            if (!!model.User_Account_Permission) {
-              query.User_Account_Name = model.User_Account_Permission
+            if (!!model.Product_Group_Name ){
+                query.Product_Group_Name = model.Product_Group_Name
+            }
+            if (!!model.status ){
+                query.status = model.status
             }
             Product_Group.findAll({
               where: query

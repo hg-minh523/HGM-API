@@ -5,7 +5,6 @@ const moment = require('moment');
     module.exports = {
         async create(req, res) {
             const user = await verifyUser(req.cookies.accessToken);
-            console.log(user)
 
             if (!user){
                 return res.json({msg: "Token expired"});
@@ -22,7 +21,7 @@ const moment = require('moment');
                 if(pathImg){
                     model.Product_Images = 'product' +'-'+ day  + '.png'
                 }
-
+                model.Product_Creator = user.id
                 const result = Products.create(model);
                 if(!!result){
                     return res.status(200).json({msg: "sucees"});
@@ -36,7 +35,7 @@ const moment = require('moment');
         },
         
         async update(req, res) {
-            const user = await verifyUser(req.headers.authorization);
+            const user = await verifyUser(req.cookies.accessToken);
             const model = req.body;
             const query = { id: model.id };
             const valueUpdate = {
@@ -45,7 +44,8 @@ const moment = require('moment');
                 Product_Group_Code: model.Product_Group_Code,
                 Product_Detail: model.Product_Detail,
                 Product_Description: model.Product_Description,
-                Status: model.Status
+                Status: model.Status,
+                Product_Creator: user.id
             };
           
             Products.update(valueUpdate, {
@@ -55,7 +55,6 @@ const moment = require('moment');
             });
         },
         async getById(req, res) {
-            const user = await verifyUser(req.headers.authorization);
             const ids = req.params.id;
 
             Products.findAll({
@@ -68,7 +67,6 @@ const moment = require('moment');
         },
 
         async delete(req, res) {
-            const user = await verifyUser(req.headers.authorization);
             const ids = req.params.id;
             try {
                 const result = Products.destroy({
@@ -86,7 +84,8 @@ const moment = require('moment');
         },
 
         async search(req, res) {
-            const model = req.body.searchModel;
+            const model = req.body?.searchModel || req.body;
+            console.log(req.body)
             const query = {};
             if (!!model.Product_Code && model.Product_Code !== ''){
                 query.Product_Code =  {$like: model.Product_Code}
@@ -109,6 +108,7 @@ const moment = require('moment');
             Products.findAll({
               where: query
             }).then(result => {
+                console.log(result)
             const data= result.map(item => item.dataValues)
               return res.status(200).json({ results:data })
             });

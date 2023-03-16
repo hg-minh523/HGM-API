@@ -1,11 +1,11 @@
 const { verifyUser } = require('../../common/authentication');
-const Employee = require('../../models/Employee/Employee.Model');
+const Customer = require('../../models/Customer/Customer.Model');
 const { autoIncrementCode } = require('../../common/CommonMethod');
 const jwt = require("jsonwebtoken")
 genarateCode = async () => {
     try {
-        const findUser = await Employee.findAll();
-        const userCode = findUser[findUser.length - 1]?.dataValues.Employee_Code
+        const findUser = await Customer.findAll();
+        const userCode = findUser[findUser.length - 1]?.dataValues.Customer_Code
         const newCode = userCode ? userCode : '';
         return autoIncrementCode(newCode)
     } catch (err) {
@@ -17,11 +17,10 @@ genarateCode = async () => {
             const token = req.cookies.accessToken;
             const user = verifyUser(token);
             const model = req.body
-            model.Employee_Account = user.User_Account_Name
-            model.Employee_Code = await genarateCode();
-            model.Employee_Creator = user.id;
+            // model.Customer_Code = await genarateCode();
+            model.Customer_Creator = user.id;
             try {
-                const result = Employee.create(model);
+                const result = Customer.create(model);
                 if (!!result) {
                     return res.status(200).json({ msg: "sucees" });
                 } else {
@@ -38,15 +37,14 @@ genarateCode = async () => {
             const model = req.body;
             const query = { id: model.id }
             const valueUpdate = {
-                Employee_Name: model.Employee_Name,
-                Employee_Avatar: model.Employee_Avatar,
-                Employee_Phone: model.Employee_Phone,
-                Employee_Email: model.Employee_Email,
-                Employee_SSR: model.Employee_SSR,
-                
+                Customer_Name: model.Customer_Name,
+                Customer_Phone: model.Customer_Phone,
+                Customer_Email: model.Customer_Email,
+                Status: model.Status,
+                Customer_Creator: user.id
             };
 
-            Employee.update(valueUpdate, {
+            Customer.update(valueUpdate, {
                 where: query
             }).then(result => {
                 return res.status(200).json({ data: result[0].dataValues })
@@ -54,7 +52,7 @@ genarateCode = async () => {
         },
         async getById(req, res) {
             const ids = Number.parseInt(req.params.id);
-            Employee.findAll({
+            Customer.findAll({
                 where: {
                     id: ids
                 }
@@ -67,7 +65,7 @@ genarateCode = async () => {
             const user = await verifyUser(req.headers.authorization);
             const ids = req.params.id;
             try {
-                const result = Employee.destroy({
+                const result = Customer.destroy({
                     where: { id: ids }
                 });
                 if (!!result) {
@@ -84,30 +82,28 @@ genarateCode = async () => {
         async search(req, res) {
             const model = req.body;
             const query = {};
-            if (!!model.Employee_Code) {
-                query.Employee_Code = model.Employee_Code
+            if (!!model.Customer_Code) {
+                query.Customer_Code = model.Customer_Code
             }
 
-            if (!!model.Employee_Name) {
-                query.Employee_Name = model.Employee_Name
+            if (!!model.Customer_Name) {
+                query.Customer_Name = model.Customer_Name
             }
 
-            if (!!model.Employee_CI) {
-                query.Employee_CI = model.Employee_CI
+            
+
+            if (!!model.Customer_Email) {
+                query.Customer_Email = model.Customer_Email
             }
 
-            if (!!model.Employee_Email) {
-                query.Employee_Email = model.Employee_Email
-            }
-
-            if (!!model.Employee_Phone) {
-                query.Employee_Phone = model.Employee_Phone
+            if (!!model.Customer_Phone) {
+                query.Customer_Phone = model.Customer_Phone
             }
 
             if (!!model.status) {
                 query.status = model.status
             }
-            Employee.findAll({
+            Customer.findAll({
                 where: query
             }).then(result => {
                 const data = result.map(item => item.dataValues)

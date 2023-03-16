@@ -5,7 +5,6 @@ const upload = require('../middlerwares/UploadImageProduct')
 router.post('/search',Product_Controllers.search);
 router.post('/create',Product_Controllers.create);
 router.post('/productImage',upload.single("product")),(req,res)=>{
-    console.log(req.files)
     res.json({msg: "sucess"})};
 router.post('/update',Product_Controllers.update);
 router.get('/getById/:id',Product_Controllers.getById);

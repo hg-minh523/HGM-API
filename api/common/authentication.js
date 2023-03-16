@@ -6,12 +6,10 @@ const comparePassword = async (hash,password) => {
 const verifyUser = async (token) => {
   const jwtTOken = await jwt.verify(token, 'secret',function(err,decoded){
     if(!!err){
-      console.log(err)
       return false;
     }
     return decoded;
   })
-
   return jwtTOken
 }
 module.exports = {
