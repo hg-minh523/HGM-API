@@ -25,7 +25,7 @@ const Product_GroupEntity = require('../Products_Group/Product_Group.Model');
     },
 
     Product_Price: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
     },
 
     Product_Detail: {

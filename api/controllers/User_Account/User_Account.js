@@ -98,7 +98,6 @@ module.exports = {
         res.json({msg:'refreshToken is expired' })
       }
       
-      console.log(user)
       const newToken = jwt.sign(user, process.env.PRIVATEKEY, { expiresIn: '24h' });
       res.cookie("accessToken", newToken, {
         httpOnly: true,

@@ -21,14 +21,10 @@ const CartDetailEntity = db.define('CartDetail', {
         type: DataTypes.INTEGER,
 
     },
+    key: {
+        type: DataTypes.INTEGER,
 
-    // Cart_Detail_Promotion: {
-    //     type: DataTypes.STRING,
-    // },
-
-    // Cart_Detail_Amount: {
-    //     type: DataTypes.STRING,
-    // },
+    },
     Cart_Code: {
         type: DataTypes.STRING,
         allowNull: false,

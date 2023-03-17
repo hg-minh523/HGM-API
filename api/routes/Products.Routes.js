@@ -3,7 +3,7 @@ const router = express.Router();
 const Product_Controllers = require('../controllers/Product/Product.Controllers');
 const upload = require('../middlerwares/UploadImageProduct')
 router.post('/search',Product_Controllers.search);
-router.post('/create',Product_Controllers.create);
+router.post('/create',upload.single("product"),Product_Controllers.create);
 router.post('/productImage',upload.single("product")),(req,res)=>{
     res.json({msg: "sucess"})};
 router.post('/update',Product_Controllers.update);

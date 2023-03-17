@@ -60,6 +60,6 @@ CartDetailEntity.belongsTo(CartEntity,{
   foreignKey: 'Cart_Code'
 })
 
-Promise.all([CartEntity.sync({force: true})])
+Promise.all([CartEntity.sync()])
 
 module.exports = CartEntity

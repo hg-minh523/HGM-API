@@ -7,8 +7,8 @@ const storage = multer.diskStorage({
       cb(null, 'api/assets/product')
     },
     filename: function (req, file, cb) {
-      const day = moment().format('YYYY-MM-DD-HH-mm-ss');
-      cb(null, file.fieldname + '-' + day + '.png')
+      const day = moment().format('YYYY-MM-DD');
+      cb(null, file.fieldname + '-' + day + '-'+file.originalname + '.png')
     }
   })
   

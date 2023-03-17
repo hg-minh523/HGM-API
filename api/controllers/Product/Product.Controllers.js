@@ -16,12 +16,12 @@ const Product_GroupEntity = require('../../models/Products_Group/Product_Group.M
                 return res.status(400).json({msg: "duplicate product code"});
             }
             try {
-                const pathImg = model?.Product_Images?.name;
-                const day = moment().format('YYYY-MM-DD-HH-mm-ss');
-
-                if(pathImg){
-                    model.Product_Images = 'product' +'-'+ day  + '.png'
-                }
+                // const pathImg = model?.Product_Images?.name;
+                const day = moment().format('YYYY-MM-DD');
+                const listImg = model.Product_Images_Request.map(item => {
+                    return 'product' +'-'+ day  + '-'+ item.name+'.png'
+                })
+                model.Product_Images = `${listImg}` || ''
                 model.Product_Creator = user.id
                 const result = Product.create(model);
                 if(!!result){

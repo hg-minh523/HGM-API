@@ -10,10 +10,10 @@ const CustomerEntity = require('../../models/Customer/Customer.Model');
 const CartDetailEntity = require('../../models/Cart_Detail/Cart_Detail.model');
 genarateCode = async () => {
     try {
-        const findUser = await Cart.findAll();
-        const userCode = findUser[findUser.length - 1]?.dataValues.Cart_Code
+        const findCart = await Cart.findAll();
+        const userCode = findCart[findCart.length - 1]?.dataValues.Cart_Code
         const newCode = userCode ? userCode : '';
-        return autoIncrementCode(newCode)
+        return autoIncrementCode(newCode,'CC')
     } catch (err) {
         // console.log(err)
     }
@@ -44,6 +44,7 @@ module.exports = {
         const user = verifyUser(token);
         const model = req.body
         const productList = model.Product_List;
+        model.Cart_Code = await genarateCode();
         productList.map(item => {
             let modelDetail = { 
                 Cart_Code: model.Cart_Code,
@@ -51,7 +52,7 @@ module.exports = {
                 Cart_Detail_Price: item?.Cart_Detail_Price,
                 Cart_Detail_Quantity: item?.Cart_Detail_Quantity,
                 Cart_Detail_Amount: item?.Cart_Detail_Amount,
-
+                key :item.key
             };
             // modelDetail.
             CartDetail.create(modelDetail).then(result => {
@@ -83,18 +84,20 @@ module.exports = {
             Status: model.Status
         };
         const productList = model.Product_List;
-        productList.map(async item => {
-            let modelDetail = {
-                Cart_Code: model.Cart_Code,
-                Cart_Detail_Product: item?.Cart_Detail_Product,
-                Cart_Detail_Price: item?.Cart_Detail_Price,
-                Cart_Detail_Quantity: item?.Cart_Detail_Quantity,
-                Cart_Detail_Amount: item?.Cart_Detail_Amount,
-                id: item.id
-            };
-            // console.log(modelDetail)
-            await updateOrCreate(modelDetail)
-        })
+        if(productList){
+            productList.map(async item => {
+                let modelDetail = {
+                    Cart_Code: model.Cart_Code,
+                    Cart_Detail_Product: item?.Cart_Detail_Product,
+                    Cart_Detail_Price: item?.Cart_Detail_Price,
+                    Cart_Detail_Quantity: item?.Cart_Detail_Quantity,
+                    Cart_Detail_Amount: item?.Cart_Detail_Amount,
+                    id: item.id
+                };
+                await updateOrCreate(modelDetail)
+            })
+        }
+        
         Cart.update(valueUpdate, {
             where: query
         }).then(result => {
