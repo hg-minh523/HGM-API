@@ -1,5 +1,8 @@
 const { DataTypes } = require('sequelize');
-const db = require('../../database/Database')
+const db = require('../../database/Database');
+const CartDetailEntity = require('../Cart_Detail/Cart_Detail.model');
+const CustomerEntity = require('../Customer/Customer.Model');
+
 const CartEntity = db.define('Cart', {
   id: {
     type: DataTypes.INTEGER,
@@ -41,7 +44,22 @@ const CartEntity = db.define('Cart', {
     allowNull: false
   }
 });
-CartEntity.sync();
+// Defind associate
+CartEntity.hasOne(CustomerEntity,{
+  sourceKey : `Customer_Code`,
+  foreignKey: `Customer_Code`,
+})
+CustomerEntity.belongsTo(CartEntity,{
+  foreignKey: `Customer_Code`,
+})
+CartEntity.hasMany(CartDetailEntity,{
+  sourceKey : `Cart_Code`,
+  foreignKey: `Cart_Code`,
+})
+CartDetailEntity.belongsTo(CartEntity,{
+  foreignKey: 'Cart_Code'
+})
 
+Promise.all([CartEntity.sync({force: true})])
 
 module.exports = CartEntity

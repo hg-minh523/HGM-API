@@ -1,5 +1,4 @@
 const autoIncrementCode = (code) => {
-    console.log(code)
     let codeTail = parseInt(code.slice(-4));
     if(isNaN(codeTail)){
         codeTail = 0;

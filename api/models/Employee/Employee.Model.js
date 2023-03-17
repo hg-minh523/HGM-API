@@ -45,7 +45,7 @@ const Employee = db.define('Employee', {
         type: DataTypes.STRING,
     }
 });
-Employee.sync({force: true});
+Employee.sync();
 
 
 module.exports = Employee

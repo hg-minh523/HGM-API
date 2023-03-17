@@ -1,7 +1,8 @@
 const { verifyUser } = require('../../common/authentication');
 const Product_Validator = require('./Product.Validation')
-const Products = require('../../models/Products/Products.Model');
+const Product = require('../../models/Products/Products.Model')
 const moment = require('moment');
+const Product_GroupEntity = require('../../models/Products_Group/Product_Group.Model');
     module.exports = {
         async create(req, res) {
             const user = await verifyUser(req.cookies.accessToken);
@@ -22,7 +23,7 @@ const moment = require('moment');
                     model.Product_Images = 'product' +'-'+ day  + '.png'
                 }
                 model.Product_Creator = user.id
-                const result = Products.create(model);
+                const result = Product.create(model);
                 if(!!result){
                     return res.status(200).json({msg: "sucees"});
                 }else {
@@ -48,7 +49,7 @@ const moment = require('moment');
                 Product_Creator: user.id
             };
           
-            Products.update(valueUpdate, {
+            Product.update(valueUpdate, {
                 where: query
             }).then(result => {
                 return res.status(200).json({ data: result[0].dataValues });
@@ -57,7 +58,7 @@ const moment = require('moment');
         async getById(req, res) {
             const ids = req.params.id;
 
-            Products.findAll({
+            Product.findAll({
                 where: {
                     id: ids
                 }
@@ -69,7 +70,7 @@ const moment = require('moment');
         async delete(req, res) {
             const ids = req.params.id;
             try {
-                const result = Products.destroy({
+                const result = Product.destroy({
                     where: {id:ids}
                 });
                 if(!!result){
@@ -85,7 +86,6 @@ const moment = require('moment');
 
         async search(req, res) {
             const model = req.body?.searchModel || req.body;
-            console.log(req.body)
             const query = {};
             if (!!model.Product_Code && model.Product_Code !== ''){
                 query.Product_Code =  {$like: model.Product_Code}
@@ -104,11 +104,11 @@ const moment = require('moment');
             if (!!model.Product_Group_Code && model.Product_Group_Code.length > 0){
                 query.Product_Group_Code = model.Product_Group_Code
             }
-            console.log(query)
-            Products.findAll({
-              where: query
+            Product.findAll({
+              where: {},
+              include: {model : Product_GroupEntity}            
             }).then(result => {
-                console.log(result)
+                // if(!!result)
             const data= result.map(item => item.dataValues)
               return res.status(200).json({ results:data })
             });

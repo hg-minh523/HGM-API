@@ -1,36 +1,51 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/Database')
-const CartDetailEntity = db.define('Product', {
+const { DataTypes, BulkRecordError } = require('sequelize');
+const db = require('../../database/Database');
+const ProductEntity = require('../Products/Products.Model');
+const CartDetailEntity = db.define('CartDetail', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
 
-    Card_Detail_Product: {
+    Cart_Detail_Product: {
         type: DataTypes.STRING,
         foreignKey: true,
     },
 
-    Card_Detail_Price: {
-        type: DataTypes.STRING,
+    Cart_Detail_Price: {
+        type: DataTypes.INTEGER,
     },
 
-    Card_Detail_Promotion: {
-        type: DataTypes.STRING,
+    Cart_Detail_Quantity: {
+        type: DataTypes.INTEGER,
+
     },
 
-    Card_Detail_Amount: {
-        type: DataTypes.STRING,
-    },
-    Card_Code: {
+    // Cart_Detail_Promotion: {
+    //     type: DataTypes.STRING,
+    // },
+
+    // Cart_Detail_Amount: {
+    //     type: DataTypes.STRING,
+    // },
+    Cart_Code: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-        foreignKey: true
     },
+}, {
+    hooks: {
+        beforeCreate: async (record, option) => {
+            const productPrice = await ProductEntity.findAll({
+                where: {
+                    Product_Code: record.dataValues.Cart_Detail_Product
+                }
+            })
+            record.dataValues.Cart_Detail_Price = productPrice[0].dataValues?.Product_Price * record.dataValues.Cart_Detail_Quantity
+        }
+    }
 });
-CartDetailEntity.sync();
+Promise.all([CartDetailEntity.sync({force: true})])
 
 
 module.exports = CartDetailEntity

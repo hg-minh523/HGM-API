@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
-const db = require('../../database/Database')
+const db = require('../../database/Database');
+const Product_GroupEntity = require('../Products_Group/Product_Group.Model');
   const ProductEntity = db.define('Product', {
     id: {
       type: DataTypes.INTEGER,
@@ -9,8 +10,6 @@ const db = require('../../database/Database')
     
     Product_Code: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
       primaryKey: true
     },
 
@@ -22,7 +21,7 @@ const db = require('../../database/Database')
     Product_Group_Code: {
         type: DataTypes.STRING,
         allowNull: false,
-        foreignKey: true
+        // foreignKey: true
     },
 
     Product_Price: {
@@ -48,7 +47,15 @@ const db = require('../../database/Database')
       allowNull: false
     }
   });
-  ProductEntity.sync();
+  ProductEntity.hasOne(Product_GroupEntity,{
+    sourceKey: "Product_Group_Code",
+    foreignKey: "Product_Group_Code"
+  })
+  ProductEntity.belongsTo(ProductEntity, {
+    foreignKey: "Product_Group_Code"
+
+  })
+  Promise.all([ProductEntity.sync()])
 
   
 module.exports = ProductEntity
