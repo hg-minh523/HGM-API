@@ -4,7 +4,7 @@ const productRoute = require('./Products.Routes');
 const productGroupRoute = require('./Product_Group.Routes');
 const customerRoute = require('./Customer.Routes');
 const cartRoute = require('./Cart.Routes');
-
+const reportRoutes = require('./Report.routes')
 
 
 
@@ -15,5 +15,7 @@ module.exports = (app) => {
     app.use('/api/v1/productGroup',productGroupRoute);
     app.use('/api/v1/customer',customerRoute);
     app.use('/api/v1/cart',cartRoute);
+    app.use('/api/v1/report',reportRoutes);
+
 
 }

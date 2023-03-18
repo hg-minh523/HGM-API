@@ -1,19 +1,18 @@
 const { verifyUser } = require('../../common/authentication');
 const Cart = require('../../models/Cart/Cart.Model');
 const CartDetail = require('../../models/Cart_Detail/Cart_Detail.model');
-// const { Sequelize } = require('Sequelize');
 const sequelize = require("../../database/Database")
 // sequelize
 const { autoIncrementCode } = require('../../common/CommonMethod');
 const jwt = require("jsonwebtoken");
 const CustomerEntity = require('../../models/Customer/Customer.Model');
 const CartDetailEntity = require('../../models/Cart_Detail/Cart_Detail.model');
-genarateCode = async () => {
+const genarateCode = async () => {
     try {
         const findCart = await Cart.findAll();
         const userCode = findCart[findCart.length - 1]?.dataValues.Cart_Code
         const newCode = userCode ? userCode : '';
-        return autoIncrementCode(newCode,'CC')
+        return autoIncrementCode(newCode,'CC')  
     } catch (err) {
         // console.log(err)
     }
@@ -27,6 +26,7 @@ genarateCode = async () => {
         }).then(async data => {
             console.log(data)
             if (!!data) {
+                model.Cart_Detail_Price = model.Cart_Detail_Quantity * data.dataValues.Cart_Detail_Price
               await  CartDetailEntity.update(model,{
                     where: {id: model.id}
                 })
@@ -45,25 +45,28 @@ module.exports = {
         const model = req.body
         const productList = model.Product_List;
         model.Cart_Code = await genarateCode();
-        productList.map(item => {
-            let modelDetail = { 
-                Cart_Code: model.Cart_Code,
-                Cart_Detail_Product: item?.Cart_Detail_Product,
-                Cart_Detail_Price: item?.Cart_Detail_Price,
-                Cart_Detail_Quantity: item?.Cart_Detail_Quantity,
-                Cart_Detail_Amount: item?.Cart_Detail_Amount,
-                key :item.key
-            };
-            // modelDetail.
-            CartDetail.create(modelDetail).then(result => {
+        if(productList){
+            productList.map(item => {
+                let modelDetail = { 
+                    Cart_Code: model.Cart_Code,
+                    Cart_Detail_Product: item?.Cart_Detail_Product,
+                    Cart_Detail_Price: item?.Cart_Detail_Price,
+                    Cart_Detail_Quantity: item?.Cart_Detail_Quantity,
+                    Cart_Detail_Amount: item?.Cart_Detail_Amount,
+                    key :item.key
+                };
+                // modelDetail.
+                CartDetail.create(modelDetail).then(result => {
+                })
             })
-        })
+        }
+        
         try {
             const result = Cart.create(model);
             if (!!result) {
                 return res.status(200).json({ msg: "sucees" });
             } else {
-                return res.status(401).json({ msg: "failt" });
+                return res.status(401).json({ msg: "failure" });
 
             }
         } catch (error) {

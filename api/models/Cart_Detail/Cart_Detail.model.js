@@ -38,10 +38,10 @@ const CartDetailEntity = db.define('CartDetail', {
                 }
             })
             record.dataValues.Cart_Detail_Price = productPrice[0].dataValues?.Product_Price * record.dataValues.Cart_Detail_Quantity
-        }
+        },
     }
 });
-Promise.all([CartDetailEntity.sync({force: true})])
+Promise.all([CartDetailEntity.sync()])
 
 
 module.exports = CartDetailEntity

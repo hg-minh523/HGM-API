@@ -2,7 +2,7 @@ const { verifyUser } = require('../../common/authentication');
 const Employee = require('../../models/Employee/Employee.Model');
 const { autoIncrementCode } = require('../../common/CommonMethod');
 const jwt = require("jsonwebtoken")
-genarateCode = async () => {
+const genarateCode = async () => {
     try {
         const findUser = await Employee.findAll();
         const userCode = findUser[findUser.length - 1]?.dataValues.Employee_Code
@@ -11,11 +11,11 @@ genarateCode = async () => {
     } catch (err) {
         // console.log(err)
     }
-},
-    module.exports = {
+}
+module.exports = {
         async create(req, res) {
             const token = req.cookies.accessToken;
-            const user = verifyUser(token);
+            const user =await verifyUser(token);
             const model = req.body
             model.Employee_Account = user.User_Account_Name
             model.Employee_Code = await genarateCode();

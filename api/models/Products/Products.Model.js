@@ -21,7 +21,7 @@ const Product_GroupEntity = require('../Products_Group/Product_Group.Model');
     Product_Group_Code: {
         type: DataTypes.STRING,
         allowNull: false,
-        // foreignKey: true
+        foreignKey: true
     },
 
     Product_Price: {
@@ -52,8 +52,7 @@ const Product_GroupEntity = require('../Products_Group/Product_Group.Model');
     foreignKey: "Product_Group_Code"
   })
   ProductEntity.belongsTo(ProductEntity, {
-    foreignKey: "Product_Group_Code"
-
+    // targetKey: "Product_Group_Code"
   })
   Promise.all([ProductEntity.sync()])
 

@@ -23,7 +23,8 @@ const db = require('../../database/Database')
         allowNull: false,
       }
   });
-  Product_GroupEntity.sync();
+  Promise.all([ Product_GroupEntity.sync()])
+
 
 
 module.exports = Product_GroupEntity

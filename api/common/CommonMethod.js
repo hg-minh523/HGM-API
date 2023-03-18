@@ -4,8 +4,14 @@ const autoIncrementCode = (code,firstC) => {
         codeTail = 0;
     }
     codeTail++;
-    const newCodeTail = String(codeTail);
-    const newCode = firstC+newCodeTail.padStart((5-newCodeTail.length),0);
+    let number = 5;
+    if (codeTail > 9){
+        number = 6;
+    }else if (codeTail > 99){
+        number = 7;
+    }
+
+    const newCode = firstC+`${codeTail}`.padStart((number-`${codeTail}`.length),0);
     return newCode;
     
 }

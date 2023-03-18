@@ -88,7 +88,7 @@ const Product_GroupEntity = require('../../models/Products_Group/Product_Group.M
             const model = req.body?.searchModel || req.body;
             const query = {};
             if (!!model.Product_Code && model.Product_Code !== ''){
-                query.Product_Code =  {$like: model.Product_Code}
+                query.Product_Code =   model.Product_Code
             }
             if (!!model.Product_Name && model.Product_Name !== ''){
                 query.Product_Name = model.Product_Name
@@ -105,7 +105,7 @@ const Product_GroupEntity = require('../../models/Products_Group/Product_Group.M
                 query.Product_Group_Code = model.Product_Group_Code
             }
             Product.findAll({
-              where: {},
+              where: query,
               include: {model : Product_GroupEntity}            
             }).then(result => {
                 // if(!!result)

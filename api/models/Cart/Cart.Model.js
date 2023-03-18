@@ -27,7 +27,10 @@ const CartEntity = db.define('Cart', {
  Cart_Email: {
     type: DataTypes.STRING,
   },
+  Address: {
+    type: DataTypes.STRING,
 
+  },
  Cart_Note: {
     type: DataTypes.STRING,
   },
