@@ -4,9 +4,9 @@ const CartDetail = require('../../models/Cart_Detail/Cart_Detail.model');
 const sequelize = require("../../database/Database")
 // sequelize
 const { autoIncrementCode } = require('../../common/CommonMethod');
-const jwt = require("jsonwebtoken");
 const CustomerEntity = require('../../models/Customer/Customer.Model');
 const CartDetailEntity = require('../../models/Cart_Detail/Cart_Detail.model');
+const { Op } = require('sequelize');
 const genarateCode = async () => {
     try {
         const findCart = await Cart.findAll();
@@ -158,10 +158,10 @@ module.exports = {
             query.Cart_MethodPay = model.Cart_MethodPay
         }
         if (!!model.Cart_Note) {
-            query.Cart_Note = model.Cart_Note
+            query.Cart_Note = {[Op.like]: `%${model.Cart_Note}%`}
         }
         if (!!model.Cart_Email) {
-            query.Cart_Email = model.Cart_Email
+            query.Cart_Email = {[Op.like]: `%${model.Cart_Email}%`}
         }
         if (!!model.Customer_Code) {
             query.Customer_Code = model.Customer_Code
@@ -169,6 +169,10 @@ module.exports = {
         if (!!model.Cart_PhoneNumber) {
             query.Cart_PhoneNumber = model.Cart_PhoneNumber
         }
+        if (!!model.Address) {
+            query.Address = {[Op.like]: `%${model.Address}%`}
+        }
+
 
         if (!!model.status) {
             query.status = model.status
