@@ -6,7 +6,7 @@ const customerRoute = require('./Customer.Routes');
 const cartRoute = require('./Cart.Routes');
 const reportRoutes = require('./Report.routes')
 const postRoutes = require('./Post.Routes')
-
+const notifyRoutes = require('./Notification.Routes')
 
 module.exports = (app) => {
     app.use('/api/v1/user',userRoute);
@@ -17,4 +17,6 @@ module.exports = (app) => {
     app.use('/api/v1/cart',cartRoute);
     app.use('/api/v1/report',reportRoutes);
     app.use('/api/v1/post',postRoutes);
+    app.use('/api/v1/notification',notifyRoutes);
+
 }

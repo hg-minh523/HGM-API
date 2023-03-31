@@ -24,7 +24,6 @@ const genarateCode = async () => {
                 Cart_Detail_Product: model.Cart_Detail_Product
             }
         }).then(async data => {
-            console.log(data)
             if (!!data) {
                 model.Cart_Detail_Price = model.Cart_Detail_Quantity * data.dataValues.Cart_Detail_Price
               await  CartDetailEntity.update(model,{
@@ -40,8 +39,8 @@ join carts on cartdetails.Cart_Code = carts.Cart_Code where cartdetails.Cart_Cod
 group by cartdetails.Cart_Code)`
 module.exports = {
     async create(req, res) {
-        const token = req.cookies.accessToken;
-        const user = verifyUser(token);
+        const token = req.headers.authentication.split(" ")[1];
+        const user =await verifyUser(token);
         const model = req.body
         const productList = model.Product_List;
         model.Cart_Code = await genarateCode();
@@ -49,10 +48,10 @@ module.exports = {
             productList.map(item => {
                 let modelDetail = { 
                     Cart_Code: model.Cart_Code,
-                    Cart_Detail_Product: item?.Cart_Detail_Product,
-                    Cart_Detail_Price: item?.Cart_Detail_Price,
-                    Cart_Detail_Quantity: item?.Cart_Detail_Quantity,
-                    Cart_Detail_Amount: item?.Cart_Detail_Amount,
+                    Cart_Detail_Product: item.Cart_Detail_Product ? item.Cart_Detail_Product : item.Product_Code,
+                    Cart_Detail_Price: item.Cart_Detail_Price ? item.Cart_Detail_Price: item.Product_Price ,
+                    Cart_Detail_Quantity: item.Cart_Detail_Quantity ? item.Cart_Detail_Quantity : item.Quantity,
+                    Cart_Detail_Amount: item.Cart_Detail_Amount ? item.Cart_Detail_Amount : '',
                     key :item.key
                 };
                 // modelDetail.
