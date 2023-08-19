@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Customer_Controllers = require('../controllers/Customer/Customer.Controller');
+const Customer_Controllers = require('../service/Customer/Customer.Controller');
 router.post('/create',Customer_Controllers.create)
 router.post('/update',Customer_Controllers.update)
 router.post('/search',Customer_Controllers.search)

@@ -47,13 +47,13 @@ const Product_GroupEntity = require('../Products_Group/Product_Group.Model');
       allowNull: false
     }
   });
-  ProductEntity.hasOne(Product_GroupEntity,{
-    sourceKey: "Product_Group_Code",
-    foreignKey: "Product_Group_Code"
-  })
-  ProductEntity.belongsTo(ProductEntity, {
-    // targetKey: "Product_Group_Code"
-  })
+  // ProductEntity.hasOne(Product_GroupEntity,{
+  //   sourceKey: "Product_Group_Code",
+  //   foreignKey: "Product_Group_Code"
+  // })
+  // ProductEntity.belongsTo(ProductEntity, {
+  //   // targetKey: "Product_Group_Code"
+  // })
   Promise.all([ProductEntity.sync()])
 
   

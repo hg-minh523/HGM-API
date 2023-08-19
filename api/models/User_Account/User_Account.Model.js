@@ -36,13 +36,13 @@ const UserEntity = db.define('User', {
   freezeTableName: true,
 });
 
-UserEntity.belongsTo(Employee,{
-  foreignKey:{
-    name: "employeeId",
-    type: DataTypes.STRING,
-    allowNull: true,
-  }
-})
+// UserEntity.belongsTo(Employee,{
+//   foreignKey:{
+//     name: "employeeId",
+//     type: DataTypes.STRING,
+//     allowNull: true,
+//   }
+// })
 
 UserEntity.sync({});
 

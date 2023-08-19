@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Employee_Controllers = require('../controllers/Employee/Employee.Controllers');
+const Employee_Controllers = require('../service/Employee/Employee.Controllers');
 router.post('/create',Employee_Controllers.create)
 router.post('/update',Employee_Controllers.update)
 router.post('/search',Employee_Controllers.search)

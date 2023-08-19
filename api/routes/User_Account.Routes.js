@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userControlelr = require('../controllers/User_Account/User_Account');
+const userControlelr = require('../service/account/User_Account');
 router.post('/register',userControlelr.register);
 router.get('/refreshToken',userControlelr.refreshToken);
 router.post('/login',userControlelr.login);
