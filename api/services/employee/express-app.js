@@ -2,15 +2,14 @@ require('dotenv').config()
 
 const express = require('express');
 const { databaseConnection } = require('./database');
-const expressApp = require('./src/account.controller');
-const bodyParser = require('body-parser');
+const expressApp = require('./src/employee.controller');
 // const { CreateChannel } = require('./utils')
 
 const StartServer = async () => {
 
     const app = express();
 
-    // Connection database
+
     try {
         await databaseConnection.authenticate();
         console.log('Connection has been established successfully.');
@@ -18,15 +17,8 @@ const StartServer = async () => {
         console.error('Unable to connect to the database:', error);
     }
     // const channel = await CreateChannel()
-    // Init middlerware
-    app.use(bodyParser.urlencoded({
-        extended: true
-      }));
-      app.use(bodyParser.json({
-        limit: '50mb'
-      }));
-      
-    expressApp(app);
+
+    await expressApp(app);
     app.use('/', (req, res) => {
         return res.json({msg : "welcome to account service"});
     })

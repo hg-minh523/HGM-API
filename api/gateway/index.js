@@ -60,8 +60,10 @@ app.use(express.static(path.join(__dirname, '/api/assets')));
 // routes(app);
 
 app.use("/account", proxy("http://localhost:8002"));
-// app.use("/account", proxy("http://localhost:8003"));
-app.use("/", proxy("http://localhost:8002"));
+app.use("/employee", proxy("http://localhost:8003"));
+app.use("/", (req, res ) => {
+  console.log(123)
+});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

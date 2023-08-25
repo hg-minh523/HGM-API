@@ -24,13 +24,10 @@ const accountEntity = db.define('account', {
     type: DataTypes.STRING,
     allowNull: false,
   }
-}, {
-  timestamps: true,
-  freezeTableName: true,
 });
 
 
-await accountEntity.sync({});
+accountEntity.sync({force: true});
 
 
 module.exports = accountEntity;

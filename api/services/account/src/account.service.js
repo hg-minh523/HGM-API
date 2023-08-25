@@ -14,7 +14,7 @@ class accountService {
   }
 
   async register(accountInputs) {
-    return this.repository.register(accountInputs);
+    return await this.repository.register(accountInputs);
   }
 
   async login(req, res) {

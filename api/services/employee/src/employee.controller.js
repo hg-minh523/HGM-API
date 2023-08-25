@@ -1,15 +1,21 @@
 
-const accountService = require('./account.service');
+const employeeService = require('./account.service');
 const { formatData } = require('../utils/utils')
 // channel is MQ service
 module.exports = (app, channel) => {
 
     const service = new accountService();
 
-    app.post('/register', async (req, res) => {
-        const { User_Account_Name, User_Account_Password, User_Account_Permission, Status } = req.body
-        console.log(service.register( { User_Account_Name, User_Account_Password, User_Account_Permission, Status }))
-        return formatData(await service.register( { User_Account_Name, User_Account_Password, User_Account_Permission, Status }), res);
+    app.post('/create', (req, res) => {
+        const token = req.cookies.accessToken;
+        const model = req.body
+        // const inputEmployee = { Employee_Code, Employee_}
+        // const user =await verifyUser(token);
+        // model.Employee_Account = user.User_Account_Name
+        // model.Employee_Code = await genarateCode();
+        // model.Employee_Creator = user.id;
+        return formatData(service.login(accountInputs, res), res);
+       
     });
 
     app.post('/login', (req, res) => {
